@@ -7,6 +7,7 @@ data "aws_region" "current" {}
 resource "aws_iam_role" "this" {
   name               = var.name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  tags               = var.tags
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -146,6 +147,7 @@ data "aws_iam_policy_document" "lambda_kinesis" {
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/lambda/${var.name}"
   retention_in_days = 14
+  tags              = var.tags
 }
 
 locals {
@@ -229,6 +231,8 @@ resource "aws_lambda_function" "this" {
     # This prevents the log-group from being re-created by an invocation of the lambda-function
     aws_cloudwatch_log_group.this,
   ]
+
+  tags = var.tags
 }
 
 resource "aws_lambda_function_event_invoke_config" "this" {
@@ -331,6 +335,8 @@ resource "aws_kinesis_stream" "this" {
   stream_mode_details {
     stream_mode = "PROVISIONED"
   }
+
+  tags = var.tags
 }
 
 resource "aws_lambda_event_source_mapping" "this" {
@@ -339,4 +345,5 @@ resource "aws_lambda_event_source_mapping" "this" {
   event_source_arn  = each.value.arn
   function_name     = aws_lambda_function.this.arn
   starting_position = "LATEST"
+  tags              = var.tags
 }

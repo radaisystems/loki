@@ -23,6 +23,8 @@ resource "aws_sqs_queue" "main" {
     deadLetterTargetArn = aws_sqs_queue.dead_letter[0].arn
     maxReceiveCount     = 5
   })
+
+  tags = var.tags
 }
 
 data "aws_iam_policy_document" "queue_policy" {
@@ -48,6 +50,8 @@ resource "aws_sqs_queue" "dead_letter" {
   count                   = var.sqs_enabled ? 1 : 0
   name                    = "${var.sqs_queue_name_prefix}-dead-letter-queue"
   sqs_managed_sse_enabled = true
+
+  tags = var.tags
 }
 
 resource "aws_sqs_queue_redrive_allow_policy" "this" {

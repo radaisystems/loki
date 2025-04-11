@@ -167,3 +167,9 @@ variable "tags" {
   description = "Tags to apply to created resources"
   default     = {}
 }
+
+variable "env_vars" {
+  type        = map(string)
+  description = "Support setting any random environment variables for the Lambda."
+  default     = {}
+}

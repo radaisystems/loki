@@ -143,3 +143,9 @@ variable "sqs_queue_name_prefix" {
   description = "Name prefix for SQS queues"
   default     = "s3-to-lambda-promtail"
 }
+
+variable "env_vars" {
+  type        = map(string)
+  description = "Support setting any random environment variables for the Lambda."
+  default     = {}
+}

@@ -197,7 +197,7 @@ resource "aws_lambda_function" "this" {
   }
 
   environment {
-    variables = {
+    variables = merge(var.env_vars, {
       WRITE_ADDRESS            = var.write_address
       USERNAME                 = var.username
       PASSWORD                 = var.password
@@ -210,7 +210,7 @@ resource "aws_lambda_function" "this" {
       TENANT_ID                = var.tenant_id
       SKIP_TLS_VERIFY          = var.skip_tls_verify
       PRINT_LOG_LINE           = var.print_log_line
-    }
+    })
   }
 
   depends_on = [

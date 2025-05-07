@@ -55,8 +55,6 @@ func setupArguments() {
 		panic(err)
 	}
 
-	fmt.Println("write address: ", writeAddress.String())
-
 	omitExtraLabelsPrefix := os.Getenv("OMIT_EXTRA_LABELS_PREFIX")
 	extraLabelsRaw = os.Getenv("EXTRA_LABELS")
 	extraLabels, err = parseExtraLabels(extraLabelsRaw, strings.EqualFold(omitExtraLabelsPrefix, "true"))
@@ -95,7 +93,6 @@ func setupArguments() {
 	if strings.EqualFold(keep, "true") {
 		keepStream = true
 	}
-	fmt.Println("keep stream: ", keepStream)
 
 	batch := os.Getenv("BATCH_SIZE")
 	batchSize = 131072
@@ -248,6 +245,10 @@ func handler(ctx context.Context, ev map[string]interface{}) error {
 		lvl = "info"
 	}
 	log := NewLogger(lvl)
+
+	level.Info(*log).Log("msg", "write address: "+writeAddress.String())
+	level.Info(*log).Log("msg", "keep stream: "+strconv.FormatBool(keepStream))
+
 	pClient := NewPromtailClient(&promtailClientConfig{
 		backoff: &backoff.Config{
 			MinBackoff: minBackoff,

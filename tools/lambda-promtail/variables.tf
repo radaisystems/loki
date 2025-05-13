@@ -126,6 +126,12 @@ variable "lambda_vpc_subnets" {
   default     = []
 }
 
+variable "retry_count" {
+  type        = number
+  description = "Retry count passed as environment variable. It determines how many times the lambda function retries pushing logs"
+  default     = 5
+}
+
 variable "lambda_vpc_security_groups" {
   type        = list(string)
   description = "List of security group IDs associated with the Lambda function."
